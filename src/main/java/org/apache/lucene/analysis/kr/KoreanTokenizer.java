@@ -108,7 +108,7 @@ public class KoreanTokenizer extends Tokenizer {
 	}
 
 	private final void init(Version matchVersion) {
-		if (matchVersion.onOrAfter(Version.LUCENE_6_0_0)) {
+		if (matchVersion.onOrAfter(Version.LUCENE_6_1_0)) {
 			replaceInvalidAcronym = true;
 		} else {
 			replaceInvalidAcronym = false;

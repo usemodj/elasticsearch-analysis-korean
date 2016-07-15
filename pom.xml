@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.elasticsearch</groupId>
   <artifactId>analysis-korean</artifactId>
-  <version>5.0.0-alpha3</version>
+  <version>5.0.0-alpha4</version>
   <packaging>jar</packaging>
   <description>Korean Analysis for ElasticSearch</description>
   <inceptionYear>2016</inceptionYear>
@@ -28,8 +28,8 @@
   </parent>
 
   <properties>
-    <elasticsearch.version>5.0.0-alpha3</elasticsearch.version>
-    <lucene.version>6.0.0</lucene.version>
+    <elasticsearch.version>5.0.0-alpha4</elasticsearch.version>
+    <lucene.version>6.1.0</lucene.version>
   </properties>
 
   <repositories>
