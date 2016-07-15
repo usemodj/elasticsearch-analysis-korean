@@ -1,35 +1,84 @@
-Korean Analysis for ElasticSearch
+Korean Analysis for ElasticSearch 5.0.0-alpha3
 ==================================
 
 The Korean Analysis plugin integrates Lucene Korean analysis module into elasticsearch.
 
-In order to install the plugin, simply run: `bin/plugin -install chanil1218/elasticsearch-analysis-korean/1.3.0`
-
-if above command is not working then try this: 
+### Install plugin
+In order to install the plugin, git clone and copy: 
 ```
-bin/plugin -url https://dl-web.dropbox.com/spa/grpekzky9x5y6mc/elastic-analysis-korean/public/elasticsearch-analysis-korean-1.3.0.zip -install analysis-korean
+sudo cp dist/analysis-korean /usr/share/elasticsearch/plugins/
+
 ```
 
-Or you can clone this git repository, set correct version, build and just copy the jar file to `plugins/analysis-korean/` directory.
+And restart elasticsearch service:
+```
+sudo service elasticsearch restart
+...
+sudo service elasticsearch status
+```
 
-    --------------------------------------------------
-    | Korean Analysis Plugin      | ElasticSearch    |
-    --------------------------------------------------
-    | master                      | 0.90.1 -> master |
-    --------------------------------------------------
-    | 1.3.0                       | 0.90.1 -> master |
-    --------------------------------------------------
-    | 1.2.0                       | 0.90.0           |
-    --------------------------------------------------
-    | 1.1.0                       | 0.19.9           |
-    --------------------------------------------------
-    | 1.0.0                       | 0.19.2           |
-    --------------------------------------------------
+### test elasticseach korean analysis
+
+```
+curl -XDELETE localhost:9200/test
+
+curl -X PUT http://localhost:9200/test -d '{
+  "settings": {
+      "analysis": {
+        "analyzer": {
+          "kr_analyzer": {
+            "type": "custom",
+            "tokenizer": "kr_tokenizer",
+            "filter": [ "trim", "kr_filter" ]
+          }
+        }
+      }
+  }
+}'
+
+curl -XGET 'localhost:9200/test/_analyze?analyzer=kr_analyzer&pretty=1' -d '아버지가 가방에 들어가셨다.'
+
+```
+
+>>Result:
+```
+{
+  "tokens" : [ {
+    "token" : "아버지가",
+    "start_offset" : 0,
+    "end_offset" : 4,
+    "type" : "word",
+    "position" : 0
+  }, {
+    "token" : "아버지",
+    "start_offset" : 0,
+    "end_offset" : 3,
+    "type" : "word",
+    "position" : 0
+  }, {
+    "token" : "가방에",
+    "start_offset" : 5,
+    "end_offset" : 8,
+    "type" : "word",
+    "position" : 1
+  }, {
+    "token" : "가방",
+    "start_offset" : 5,
+    "end_offset" : 7,
+    "type" : "word",
+    "position" : 1
+  }, {
+    "token" : "들어가셨다",
+    "start_offset" : 9,
+    "end_offset" : 14,
+    "type" : "word",
+    "position" : 2
+  } ]
+}
+
+```
 
 The plugin includes the `kr_analyzer` analyzer, `kr_tokenizer` tokenizer, and `kr_filter` token filter.
 
 
-Lucene Korean Analysis Module
-==============================
 
-http://cafe.naver.com/korlucene
