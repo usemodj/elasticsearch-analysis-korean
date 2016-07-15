@@ -500,6 +500,8 @@ final void getText(CharTermAttribute t) {
    * @param   in  the java.io.Reader to read input from.
    */
   KoreanTokenizerImpl(java.io.Reader in) {
+	System.out.println(">>KoreanTokenizerImpl constructor called....");
+
     this.zzReader = in;
   }
 

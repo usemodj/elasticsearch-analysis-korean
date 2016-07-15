@@ -19,6 +19,7 @@ package org.apache.lucene.analysis.kr;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -26,6 +27,8 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
+import org.apache.lucene.analysis.util.RollingCharBuffer;
+import org.apache.lucene.util.AttributeFactory;
 import org.apache.lucene.util.AttributeSource;
 import org.apache.lucene.util.Version;
 
@@ -46,6 +49,9 @@ public class KoreanTokenizer extends Tokenizer {
 	public static final int KOREAN = 9;
 	public static final int CHINESE = 10;
 
+	//private final RollingCharBuffer buffer = new RollingCharBuffer();
+	//protected Reader input = new StringReader("");
+	
 	/** String token types that correspond to token type int constants */
 	public static final String[] TOKEN_TYPES = new String[] { "<ALPHANUM>",
 			"<APOSTROPHE>", "<ACRONYM>", "<COMPANY>", "<EMAIL>", "<HOST>",
@@ -77,40 +83,36 @@ public class KoreanTokenizer extends Tokenizer {
 	 * 
 	 *            See http://issues.apache.org/jira/browse/LUCENE-1068
 	 */
-	public KoreanTokenizer(Version matchVersion, Reader input) {
-		super(input);
-		this.scanner = new KoreanTokenizerImpl(input);
-		init(input, matchVersion);
+	public KoreanTokenizer(Version matchVersion) {
+		this(matchVersion, DEFAULT_TOKEN_ATTRIBUTE_FACTORY);
 	}
 
 	/**
 	 * Creates a new StandardTokenizer with a given {@link AttributeSource}.
 	 */
-	public KoreanTokenizer(Version matchVersion, AttributeSource source,
-			Reader input) {
-		super(source.getAttributeFactory(), input);
-		this.scanner = new KoreanTokenizerImpl(input);
-		init(input, matchVersion);
+	public KoreanTokenizer(Version matchVersion, AttributeSource source) {
+		super(source.getAttributeFactory());
+		this.scanner = new KoreanTokenizerImpl(this.input);
+		init(matchVersion);
 	}
 
 	/**
 	 * Creates a new StandardTokenizer with a given
 	 * {@link org.apache.lucene.util.AttributeSource.AttributeFactory}
 	 */
-	public KoreanTokenizer(Version matchVersion, AttributeFactory factory,
-			Reader input) {
-		super(factory, input);
-		this.scanner = new KoreanTokenizerImpl(input);
-		init(input, matchVersion);
+	public KoreanTokenizer(Version matchVersion, AttributeFactory factory) {
+		super(factory);
+		super.setReader(this.input);
+		this.scanner = new KoreanTokenizerImpl(this.input);
+		init(matchVersion);
 	}
 
-	private final void init(Reader input, Version matchVersion) {
-		if (matchVersion.onOrAfter(Version.LUCENE_30)) {
+	private final void init(Version matchVersion) {
+		if (matchVersion.onOrAfter(Version.LUCENE_6_0_0)) {
 			replaceInvalidAcronym = true;
 		} else {
 			replaceInvalidAcronym = false;
 		}
-		this.input = input;
 	}
 
 	// this tokenizer generates three attributes:
@@ -154,7 +156,8 @@ public class KoreanTokenizer extends Tokenizer {
 	}
 
 	@Override
-	public final void end() {
+	public final void end() throws IOException {
+		super.end();
 		// set final offset
 		int finalOffset = correctOffset(scanner.yychar() + scanner.yylength());
 		offsetAtt.setOffset(finalOffset, finalOffset);
@@ -162,7 +165,8 @@ public class KoreanTokenizer extends Tokenizer {
 
 	@Override
 	public void reset() throws IOException {
-		scanner.yyreset(input);
+		super.reset();
+		scanner.yyreset(this.input);
 	}
 
 }

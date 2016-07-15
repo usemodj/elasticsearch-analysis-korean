@@ -3,8 +3,6 @@ package org.apache.solr.analysis.kr;
 import java.util.Map;
 
 import org.apache.lucene.analysis.TokenStream;
-
-
 import org.apache.lucene.analysis.kr.KoreanFilter;
 import org.apache.lucene.analysis.util.TokenFilterFactory;
 
@@ -18,13 +16,21 @@ public class KoreanFilterFactory extends TokenFilterFactory {
 	
 	private boolean exactMatch = false;
 	
-	public void init(Map<String, String> args) {
-	    super.init(args);
-	    bigrammable = getBoolean("bigrammable", true);
-	    hasOrigin = getBoolean("hasOrigin", true);
-	    exactMatch = getBoolean("exactMatch", false);
-	    hasCNoun = getBoolean("hasCNoun", true);
+	protected KoreanFilterFactory(Map<String, String> args) {
+		super(args);
+	    bigrammable = getBoolean(args, "bigrammable", true);
+	    hasOrigin = getBoolean(args, "hasOrigin", true);
+	    exactMatch = getBoolean(args, "exactMatch", false);
+	    hasCNoun = getBoolean(args, "hasCNoun", true);
 	}
+
+//	public void init(Map<String, String> args) {
+//	    super.init(args);
+//	    bigrammable = getBoolean("bigrammable", true);
+//	    hasOrigin = getBoolean("hasOrigin", true);
+//	    exactMatch = getBoolean("exactMatch", false);
+//	    hasCNoun = getBoolean("hasCNoun", true);
+//	}
 	  
 	public TokenStream create(TokenStream tokenstream) {
 		return new KoreanFilter(tokenstream, bigrammable, hasOrigin, exactMatch, hasCNoun);

@@ -97,6 +97,7 @@ public class KoreanFilter extends TokenFilter {
 		morph = new MorphAnalyzer();
 		wsAnal = new WordSpaceAnalyzer();
 		cnAnalyzer.setExactMach(false);
+		System.out.println(">> KoreanFilter contructor called....");
 	}
 
 	/**

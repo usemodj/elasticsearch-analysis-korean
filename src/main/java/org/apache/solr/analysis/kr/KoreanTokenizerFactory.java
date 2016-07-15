@@ -1,27 +1,26 @@
 package org.apache.solr.analysis.kr;
 
-import java.io.Reader;
-
-
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.kr.KoreanTokenizer;
-import org.apache.lucene.analysis.util.TokenizerFactory;
+import org.apache.lucene.util.AttributeFactory;
 import org.apache.lucene.util.Version;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.env.Environment;
+import org.elasticsearch.index.IndexSettings;
+import org.elasticsearch.index.analysis.AbstractTokenizerFactory;
 
-public class KoreanTokenizerFactory extends TokenizerFactory {
+public class KoreanTokenizerFactory extends AbstractTokenizerFactory {
 
 	private Version version;
 	
-	public KoreanTokenizerFactory() {
-		version = Version.LUCENE_42;
+	public KoreanTokenizerFactory(IndexSettings indexSettings, Environment env, String name, Settings settings) {
+        super(indexSettings, name, settings);
+		version = Version.LUCENE_6_0_0;
 	}
-	
-	public KoreanTokenizerFactory(Version v) {
-		version = v;
-	}
-	
-	public Tokenizer create(Reader input) {
-		return new KoreanTokenizer(version, input);
+
+	@Override
+	public Tokenizer create() {
+		return new KoreanTokenizer(version);
 	}
 
 }

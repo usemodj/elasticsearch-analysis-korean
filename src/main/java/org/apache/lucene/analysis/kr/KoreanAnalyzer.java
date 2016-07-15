@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -76,6 +77,7 @@ public class KoreanAnalyzer extends StopwordAnalyzerBase {
 	  useful for searching. */
 	  public static final CharArraySet STOP_WORDS_SET; 
 	  
+	  private Version version;
 
 	 static
 	 {
@@ -85,14 +87,14 @@ public class KoreanAnalyzer extends StopwordAnalyzerBase {
 				"이","그","저","것","수","등","들","및","에서","그리고","그래서","또","또는"}
 		);
 		
-	    CharArraySet stopSet = new CharArraySet(Version.LUCENE_42, stopWords.size(), false);
+	    CharArraySet stopSet = new CharArraySet(stopWords.size(), false); 
 	 
 	    stopSet.addAll(stopWords);
 	    STOP_WORDS_SET = CharArraySet.unmodifiableSet(stopSet);
 	}
 	  
 	public KoreanAnalyzer() {
-	    this(Version.LUCENE_42, STOP_WORDS_SET);
+	    this(Version.LUCENE_6_0_0, STOP_WORDS_SET);
 	}
 
 	/**
@@ -100,12 +102,12 @@ public class KoreanAnalyzer extends StopwordAnalyzerBase {
 	 * @param search
 	 */
 	public KoreanAnalyzer(boolean exactMatch) {
-	    this(Version.LUCENE_42, STOP_WORDS_SET);	    
+	    this(Version.LUCENE_6_0_0, STOP_WORDS_SET);	    
 	    this.exactMatch = exactMatch;
 	}
 	
 	public KoreanAnalyzer(Version matchVersion, String[] stopWords) throws IOException {
-	    this(matchVersion, StopFilter.makeStopSet(matchVersion, stopWords));    
+	    this(matchVersion, StopFilter.makeStopSet(stopWords, true)); //ignore case   
 	}
 
   /** Builds an analyzer with the stop words from the given file.
@@ -118,43 +120,44 @@ public class KoreanAnalyzer extends StopwordAnalyzerBase {
   /** Builds an analyzer with the stop words from the given file.
    * @see WordlistLoader#getWordSet(File)
    */
-	public KoreanAnalyzer(Version matchVersion, File stopwords) throws IOException {     
-		this(matchVersion, loadStopwordSet(stopwords, matchVersion));        
+	public KoreanAnalyzer(Version matchVersion, Path stopwords) throws IOException {     
+		this(matchVersion, loadStopwordSet(stopwords));        
 	}
 
   /** Builds an analyzer with the stop words from the given file.
    * @see WordlistLoader#getWordSet(File)
    */
-	public KoreanAnalyzer(Version matchVersion, File stopwords, String encoding) throws IOException {
-		this(matchVersion, loadStopwordSet(stopwords, matchVersion));  
+	public KoreanAnalyzer(Version matchVersion, Path stopwords, String encoding) throws IOException {
+		this(matchVersion, loadStopwordSet(stopwords));  
 	}
 		
 	/** Builds an analyzer with the stop words from the given reader.
 	 * @see WordlistLoader#getWordSet(Reader)
 	*/
 	public KoreanAnalyzer(Version matchVersion, Reader stopwords) throws IOException {
-		this(matchVersion, loadStopwordSet(stopwords, matchVersion));  			    
+		this(matchVersion, loadStopwordSet(stopwords));  			    
 	}
 
 	/** Builds an analyzer with the stop words from the given reader.
 	 * @see WordlistLoader#getWordSet(Reader)
 	*/
 	public KoreanAnalyzer(Version matchVersion, CharArraySet stopWords) {
-		super(matchVersion, stopWords); 
-	    replaceInvalidAcronym = matchVersion.onOrAfter(Version.LUCENE_42);	   
+		super(stopWords); 
+		this.version = matchVersion;
+	    replaceInvalidAcronym = matchVersion.onOrAfter(Version.LUCENE_6_0_0);	   
 	}
 	
 	
    @Override
-   protected TokenStreamComponents createComponents(final String fieldName, final Reader reader) {
-     final KoreanTokenizer src = new KoreanTokenizer(matchVersion, reader);
+   protected TokenStreamComponents createComponents(final String fieldName) {
+     final KoreanTokenizer src = new KoreanTokenizer(this.version);
      src.setMaxTokenLength(maxTokenLength);
      TokenStream tok = new KoreanFilter(src, bigrammable, hasOrigin, exactMatch, originCNoun);
-     tok = new LowerCaseFilter(matchVersion, tok);
-     tok = new StopFilter(matchVersion, tok, stopwords);
+     tok = new LowerCaseFilter(tok);
+     tok = new StopFilter(tok, stopwords);
      return new TokenStreamComponents(src, tok) {
        @Override
-       protected void setReader(final Reader reader) throws IOException {
+       protected void setReader(final Reader reader) {
          src.setMaxTokenLength(KoreanAnalyzer.this.maxTokenLength);
          super.setReader(reader);
        }
@@ -193,5 +196,5 @@ public class KoreanAnalyzer extends StopwordAnalyzerBase {
 	public void setExactMatch(boolean exact) {
 		exactMatch = exact;
 	}
-	
+
 }
