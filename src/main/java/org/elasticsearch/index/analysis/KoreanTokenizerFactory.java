@@ -16,7 +16,6 @@ public class KoreanTokenizerFactory extends AbstractTokenizerFactory {
 
 	@Override
 	public Tokenizer create() {
-		System.err.println(">>KoreanTokenizerFactory.create() called....");
 	    return new KoreanTokenizer(Version.LUCENE_6_0_0);
 	}   
 }
