@@ -4,17 +4,18 @@ Korean Analysis for ElasticSearch 5.0.0-alpha4
 The Korean Analysis plugin integrates Lucene Korean analysis module into elasticsearch.
 
 ### Install plugin
-In order to install the plugin, git clone and copy: 
+In order to install the plugin, git clone and copy:
 ```
-sudo cp dist/analysis-korean /usr/share/elasticsearch/plugins/
-
+$ git clone https://github.com/usemodj/elasticsearch-analysis-korean.git
+$ cd elasticsearch-analysis-korean/
+$ sudo cp -R dist/analysis-korean /usr/share/elasticsearch/plugins/
 ```
 
 And restart elasticsearch service:
 ```
-sudo service elasticsearch restart
+$ sudo service elasticsearch restart
 ...
-sudo service elasticsearch status
+$ sudo service elasticsearch status
 ```
 
 ### test elasticseach korean analysis
@@ -79,6 +80,3 @@ curl -XGET 'localhost:9200/test/_analyze?analyzer=kr_analyzer&pretty=1' -d 'ì•„ë
 ```
 
 The plugin includes the `kr_analyzer` analyzer, `kr_tokenizer` tokenizer, and `kr_filter` token filter.
-
-
-
