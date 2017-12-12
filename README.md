@@ -20,7 +20,7 @@ $ sudo service elasticsearch status
 
 ### Check elasticsearch version:
 ```
-$ curl -XGET 'localhost:9200'
+$ curl -XGET 'http://localhost:9200'
 ```
 >```
 > # print the elasticsearch version
@@ -41,12 +41,14 @@ $ curl -XGET 'localhost:9200'
 > }
 >```
 
-### test elasticseach korean analysis
+### Test ElasticSeach Korean Analysis Plugin
 
 ```
-$ curl -XDELETE localhost:9200/test
-$
-$ curl -X PUT http://localhost:9200/test -d '{
+# Delete `test` index:
+$ curl -XDELETE http://localhost:9200/test
+
+# Create `test` index for `kr_analyzer` korean-analysis analyzer:
+$ curl -XPUT 'http://localhost:9200/test' -H 'Content-Type: application/json' -d '{
   "settings": {
       "analysis": {
         "analyzer": {
@@ -59,45 +61,57 @@ $ curl -X PUT http://localhost:9200/test -d '{
       }
   }
 }'
-
-$
-$ curl -XGET 'localhost:9200/test/_analyze?analyzer=kr_analyzer&pretty=1' -d '아버지가 가방에 들어가셨다.'
 ```
+> Results: {"acknowledged":true,"shards_acknowledged":true,"index":"test"}
 
+```
+# Analyze `test` index for `kr_analyzer` korean-analysis analyzer:
+
+$ curl -XGET 'localhost:9200/_analyze?pretty' -H 'Content-Type: application/json' -d '{
+  "analyzer": "kr_analyzer",
+  "text": "아버지가 가방에 들어가셨다."
+}'
+```
 > Result:
 >```
 > {
->   "tokens" : [ {
->     "token" : "아버지가",
->     "start_offset" : 0,
->     "end_offset" : 4,
->     "type" : "word",
->     "position" : 0
->   }, {
->     "token" : "아버지",
->     "start_offset" : 0,
->     "end_offset" : 3,
->     "type" : "word",
->     "position" : 0
->   }, {
->     "token" : "가방에",
->     "start_offset" : 5,
->     "end_offset" : 8,
->     "type" : "word",
->     "position" : 1
->   }, {
->     "token" : "가방",
->     "start_offset" : 5,
->     "end_offset" : 7,
->     "type" : "word",
->     "position" : 1
->   }, {
->     "token" : "들어가셨다",
->     "start_offset" : 9,
->     "end_offset" : 14,
->     "type" : "word",
->     "position" : 2
->   } ]
+>   "tokens" : [
+>     {
+>       "token" : "아버지가",
+>       "start_offset" : 0,
+>       "end_offset" : 4,
+>       "type" : "word",
+>       "position" : 0
+>     },
+>     {
+>       "token" : "아버지",
+>       "start_offset" : 0,
+>       "end_offset" : 3,
+>       "type" : "word",
+>       "position" : 0
+>     },
+>     {
+>       "token" : "가방에",
+>       "start_offset" : 5,
+>       "end_offset" : 8,
+>       "type" : "word",
+>       "position" : 1
+>     },
+>     {
+>       "token" : "가방",
+>       "start_offset" : 5,
+>       "end_offset" : 7,
+>       "type" : "word",
+>       "position" : 1
+>     },
+>     {
+>       "token" : "들어가셨다",
+>       "start_offset" : 9,
+>       "end_offset" : 14,
+>       "type" : "word",
+>       "position" : 2
+>     }
+>   ]
 > }
 >```
 
