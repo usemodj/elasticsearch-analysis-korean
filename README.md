@@ -1,4 +1,4 @@
-Korean Analysis for ElasticSearch 5.0.0-alpha4
+Korean Analysis for ElasticSearch 6.0.1
 ==================================
 
 The Korean Analysis plugin integrates Lucene Korean analysis module into elasticsearch.
