@@ -445,7 +445,7 @@ public class MorphAnalyzer {
 			return true;
 		}
 
-		List<CompoundEntry> results = cnAnalyzer.analyze(o.getStem());
+		List<CompoundEntry> results = (List<CompoundEntry>) cnAnalyzer.analyze(o.getStem());
 		// System.out.println(o);
 		// for(CompoundEntry c :results)
 		// System.out.println(c.getWord()+":"+c.isExist());

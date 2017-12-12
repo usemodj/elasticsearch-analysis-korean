@@ -1,6 +1,14 @@
 package org.apache.lucene.analysis.kr;
 
 
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -17,30 +25,15 @@ package org.apache.lucene.analysis.kr;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import org.apache.lucene.analysis.*;
-import org.apache.lucene.analysis.Analyzer.TokenStreamComponents;
+import org.apache.lucene.analysis.CharArraySet;
+import org.apache.lucene.analysis.StopwordAnalyzerBase;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.WordlistLoader;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
 import org.apache.lucene.analysis.core.StopFilter;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
-import org.apache.lucene.analysis.util.CharArraySet;
-import org.apache.lucene.analysis.util.StopwordAnalyzerBase;
-import org.apache.lucene.analysis.util.WordlistLoader;
-
 import org.apache.lucene.util.Version;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Filters {@link StandardTokenizer} with {@link StandardFilter}, {@link
@@ -81,7 +74,7 @@ public class KoreanAnalyzer extends StopwordAnalyzerBase {
 
 	 static
 	 {
-		List stopWords = Arrays.asList(new String[] { "a", "an", "and", "are", "as", "at", "be", "but", "by", 
+		List<String> stopWords = Arrays.asList(new String[] { "a", "an", "and", "are", "as", "at", "be", "but", "by", 
 				"for", "if", "in", "into", "is", "it", "no", "not", "of", "on", "or", "such", "that", "the", 
 				"their", "then", "there", "these", "they", "this", "to", "was", "will", "with",
 				"이","그","저","것","수","등","들","및","에서","그리고","그래서","또","또는"}
@@ -94,7 +87,7 @@ public class KoreanAnalyzer extends StopwordAnalyzerBase {
 	}
 	  
 	public KoreanAnalyzer() {
-	    this(Version.LUCENE_6_0_0, STOP_WORDS_SET);
+	    this(Version.LUCENE_7_1_0, STOP_WORDS_SET);
 	}
 
 	/**
@@ -102,7 +95,7 @@ public class KoreanAnalyzer extends StopwordAnalyzerBase {
 	 * @param search
 	 */
 	public KoreanAnalyzer(boolean exactMatch) {
-	    this(Version.LUCENE_6_0_0, STOP_WORDS_SET);	    
+	    this(Version.LUCENE_7_1_0, STOP_WORDS_SET);	    
 	    this.exactMatch = exactMatch;
 	}
 	

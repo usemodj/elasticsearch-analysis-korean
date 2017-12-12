@@ -55,18 +55,18 @@ public class CompoundNounAnalyzer {
 		this.exactMach = exactMach;
 	}
 
-	public List analyze(String input) throws MorphException {
+	public List<?> analyze(String input) throws MorphException {
 		
 		return analyze(input,true);
 		
 	}
 	
-	public List analyze(String input, boolean isFirst) throws MorphException {
+	public List<CompoundEntry> analyze(String input, boolean isFirst) throws MorphException {
 		
 		int len = input.length();
-		if(len<3) return new ArrayList();	
+		if(len<3) return new ArrayList<CompoundEntry>();	
 		
-		List outputs = new ArrayList();
+		List<CompoundEntry> outputs = new ArrayList<CompoundEntry>();
 		
 		switch(len) {
 			case  3 :
@@ -89,7 +89,7 @@ public class CompoundNounAnalyzer {
 		
 	}
 		
-	private void analyze3Word(String input,List outputs, boolean isFirst) throws MorphException {
+	private void analyze3Word(String input,List<CompoundEntry> outputs, boolean isFirst) throws MorphException {
 
 		int[] units1 = {2,1};
 		CompoundEntry[] entries1 = analysisBySplited(units1,input,isFirst);
@@ -106,7 +106,7 @@ public class CompoundNounAnalyzer {
 					
 	}	
 	
-	private void analyze4Word(String input,List outputs, boolean isFirst) throws MorphException {
+	private void analyze4Word(String input,List<CompoundEntry> outputs, boolean isFirst) throws MorphException {
 	
 		if(!isFirst) {
 			int[] units0 = {1,3};
@@ -136,7 +136,7 @@ public class CompoundNounAnalyzer {
 		}
 	}
 	
-	private void analyze5Word(String input,List outputs, boolean isFirst) throws MorphException {
+	private void analyze5Word(String input,List<CompoundEntry> outputs, boolean isFirst) throws MorphException {
 			
 		int[] units1 = {2,3};
 		CompoundEntry[] entries1 = analysisBySplited(units1,input,isFirst);
@@ -192,7 +192,7 @@ public class CompoundNounAnalyzer {
 		}			
 	}
 	
-	private void analyze6Word(String input,List outputs, boolean isFirst) throws MorphException {
+	private void analyze6Word(String input,List<CompoundEntry> outputs, boolean isFirst) throws MorphException {
 		
 		int[] units3 = {2,4};
 		CompoundEntry[] entries3 = analysisBySplited(units3,input,isFirst);
@@ -264,7 +264,7 @@ public class CompoundNounAnalyzer {
 			
 	}
 	
-	private void analyzeLongText(String input,List outputs, boolean isFirst) throws MorphException {
+	private void analyzeLongText(String input,List<CompoundEntry> outputs, boolean isFirst) throws MorphException {
 	
 		int pos = input.length()/2;
 		if(input.length()%2==1) pos++;
@@ -272,7 +272,7 @@ public class CompoundNounAnalyzer {
 		if(input.length()>20) return; // 20글자 이상의 복합명사는 무시함.
 		
 		int score = 0;
-		List results = new ArrayList();
+		List<CompoundEntry> results = new ArrayList<CompoundEntry>();
 		boolean hasContain = false;
 		
 		for(int i=pos;i>=2;i--) {
@@ -280,7 +280,7 @@ public class CompoundNounAnalyzer {
 			String prev = input.substring(0,i);
 			String rear = input.substring(i);
 			
-			List<CompoundEntry> candidates = new ArrayList();
+			List<CompoundEntry> candidates = new ArrayList<CompoundEntry>();
 			
 			CompoundEntry prevEntry = analyzeSingle(prev);
 			if(prevEntry.isExist()) {

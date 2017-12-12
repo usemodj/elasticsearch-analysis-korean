@@ -294,8 +294,8 @@ public class DictionaryUtil {
 		}
 	}
 	
-	private static List compoundArrayToList(String source, String[] arr) {
-		List list = new ArrayList();
+	private static List<CompoundEntry> compoundArrayToList(String source, String[] arr) {
+		List<CompoundEntry> list = new ArrayList<CompoundEntry>();
 		for(String str: arr) {
 			CompoundEntry ce = new CompoundEntry(str);
 			ce.setOffset(source.indexOf(str));
