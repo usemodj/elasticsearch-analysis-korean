@@ -23,22 +23,22 @@ $ sudo service elasticsearch status
 $ curl -XGET 'localhost:9200'
 ```
 >```
-# print the elasticsearch version
-{
-  "name" : "DGJeJk2",
-  "cluster_name" : "elasticsearch",
-  "cluster_uuid" : "p-XSaQChSPymZ6QCzb1D_g",
-  "version" : {
-    "number" : "6.0.1",
-    "build_hash" : "601be4a",
-    "build_date" : "2017-12-04T09:29:09.525Z",
-    "build_snapshot" : false,
-    "lucene_version" : "7.0.1",
-    "minimum_wire_compatibility_version" : "5.6.0",
-    "minimum_index_compatibility_version" : "5.0.0"
-  },
-  "tagline" : "You Know, for Search"
-}
+> # print the elasticsearch version
+> {
+>   "name" : "DGJeJk2",
+>   "cluster_name" : "elasticsearch",
+>   "cluster_uuid" : "p-XSaQChSPymZ6QCzb1D_g",
+>   "version" : {
+>     "number" : "6.0.1",
+>     "build_hash" : "601be4a",
+>     "build_date" : "2017-12-04T09:29:09.525Z",
+>     "build_snapshot" : false,
+>     "lucene_version" : "7.0.1",
+>     "minimum_wire_compatibility_version" : "5.6.0",
+>     "minimum_index_compatibility_version" : "5.0.0"
+>   },
+>   "tagline" : "You Know, for Search"
+> }
 >```
 
 ### test elasticseach korean analysis
@@ -66,39 +66,39 @@ $ curl -XGET 'localhost:9200/test/_analyze?analyzer=kr_analyzer&pretty=1' -d '�
 
 > Result:
 >```
-{
-  "tokens" : [ {
-    "token" : "아버지가",
-    "start_offset" : 0,
-    "end_offset" : 4,
-    "type" : "word",
-    "position" : 0
-  }, {
-    "token" : "아버지",
-    "start_offset" : 0,
-    "end_offset" : 3,
-    "type" : "word",
-    "position" : 0
-  }, {
-    "token" : "가방에",
-    "start_offset" : 5,
-    "end_offset" : 8,
-    "type" : "word",
-    "position" : 1
-  }, {
-    "token" : "가방",
-    "start_offset" : 5,
-    "end_offset" : 7,
-    "type" : "word",
-    "position" : 1
-  }, {
-    "token" : "들어가셨다",
-    "start_offset" : 9,
-    "end_offset" : 14,
-    "type" : "word",
-    "position" : 2
-  } ]
-}
+> {
+>   "tokens" : [ {
+>     "token" : "아버지가",
+>     "start_offset" : 0,
+>     "end_offset" : 4,
+>     "type" : "word",
+>     "position" : 0
+>   }, {
+>     "token" : "아버지",
+>     "start_offset" : 0,
+>     "end_offset" : 3,
+>     "type" : "word",
+>     "position" : 0
+>   }, {
+>     "token" : "가방에",
+>     "start_offset" : 5,
+>     "end_offset" : 8,
+>     "type" : "word",
+>     "position" : 1
+>   }, {
+>     "token" : "가방",
+>     "start_offset" : 5,
+>     "end_offset" : 7,
+>     "type" : "word",
+>     "position" : 1
+>   }, {
+>     "token" : "들어가셨다",
+>     "start_offset" : 9,
+>     "end_offset" : 14,
+>     "type" : "word",
+>     "position" : 2
+>   } ]
+> }
 >```
 
 The plugin includes the `kr_analyzer` analyzer, `kr_tokenizer` tokenizer, and `kr_filter` token filter.
