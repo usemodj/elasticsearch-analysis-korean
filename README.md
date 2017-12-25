@@ -1,7 +1,15 @@
-Korean Analysis for ElasticSearch 6.0.1
+Korean Analysis for ElasticSearch 6.1.1
 ==================================
 
-The Korean Analysis plugin integrates Lucene Korean analysis module into elasticsearch.
+The `Korean Analysis plugin` integrates the `Lucene Korean analysis` module
+into the Text Search Engine(Server) `ElasticSearch`.
+
+> _The `Analysis Plugin` version must be exactly_
+> _the same as the version of `ElasticSearch` you are running._
+>> Check `elasticsearch` version you are running:
+>>```
+>>$ curl -XGET 'http://localhost:9200'
+>>```
 
 ### Install plugin
 In order to install the plugin, git clone and copy:
@@ -18,6 +26,12 @@ $ sudo service elasticsearch restart
 $ sudo service elasticsearch status
 ```
 
+For checking the `elasticsearch` log:
+```
+$ sudo tail -f /var/log/elasticsearch/elasticsearch.log
+```
+
+
 ### Check elasticsearch version:
 ```
 $ curl -XGET 'http://localhost:9200'
@@ -29,17 +43,18 @@ $ curl -XGET 'http://localhost:9200'
 >   "cluster_name" : "elasticsearch",
 >   "cluster_uuid" : "p-XSaQChSPymZ6QCzb1D_g",
 >   "version" : {
->     "number" : "6.0.1",
->     "build_hash" : "601be4a",
->     "build_date" : "2017-12-04T09:29:09.525Z",
+>     "number" : "6.1.1",
+>     "build_hash" : "bd92e7f",
+>     "build_date" : "2017-12-17T20:23:25.338Z",
 >     "build_snapshot" : false,
->     "lucene_version" : "7.0.1",
+>     "lucene_version" : "7.1.0",
 >     "minimum_wire_compatibility_version" : "5.6.0",
 >     "minimum_index_compatibility_version" : "5.0.0"
 >   },
 >   "tagline" : "You Know, for Search"
 > }
 >```
+>>
 
 ### Test ElasticSeach Korean Analysis Plugin
 
@@ -148,7 +163,7 @@ OS name: "linux", version: "4.10.0-42-generic", arch: "amd64", family: "unix"
 
 ```
 
-2. Building analysis-korean 6.0.1 :
+2. Building analysis-korean 6.1.1 :
 ```
 $ mvn verify
 ```
